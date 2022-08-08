@@ -7,7 +7,7 @@ import androidx.room.*
 @Dao
 interface LoginDao {
     @Query("select * from User")
-    fun getUser(): LiveData<List<User>>
+    suspend fun getUser(): List<User>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUser(user:User)

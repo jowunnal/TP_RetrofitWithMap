@@ -20,11 +20,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.loginViewModel= ViewModelProvider(this)[LoginViewModel::class.java]
 
-        vm.getUser().observe(this,Observer{
-            vm.userLiveData.value=it
-            binding.textView.text=it.toString()
-        })
-
 
         KakaoSdk.init(this, "255e031fc634ddb6120157a6e2e025e1")
 

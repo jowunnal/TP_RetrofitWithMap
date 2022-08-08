@@ -13,7 +13,7 @@ abstract class LoginDatabase : RoomDatabase(){
         private var LoginInstance : LoginDatabase ?= null
         fun getInstance(context:Application):LoginDatabase{
             return LoginInstance ?: synchronized(LoginDatabase::class.java){
-                val instance = Room.databaseBuilder(context.applicationContext,LoginDatabase::class.java,"LoginDatabase").build()
+                val instance = Room.databaseBuilder(context.applicationContext,LoginDatabase::class.java,"LoginDatabase").fallbackToDestructiveMigration().build()
                 LoginInstance=instance
                 instance
             }
