@@ -1,10 +1,10 @@
-package com.example.example_kakaologinapi
+package com.example.example_kakaologinapi.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
+import com.example.example_kakaologinapi.R
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController

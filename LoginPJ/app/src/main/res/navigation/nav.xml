@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.example_kakaologinapi.Login"
+        android:name="com.example.example_kakaologinapi.fragment.Login"
         android:label="fragment_login"
         tools:layout="@layout/login">
         <action
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.example_kakaologinapi.Home"
+        android:name="com.example.example_kakaologinapi.fragment.Home"
         android:label="fragment_home"
         tools:layout="@layout/home" >
         <action

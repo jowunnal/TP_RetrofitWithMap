@@ -1,7 +1,6 @@
-package com.example.example_kakaologinapi
+package com.example.example_kakaologinapi.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,21 +8,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
+import com.example.example_kakaologinapi.viewModel.LoginViewModel
+import com.example.example_kakaologinapi.R
 import com.example.example_kakaologinapi.databinding.LoginBinding
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.user.UserApiClient
 
 class Login : Fragment() {
     private var _binding : LoginBinding ?= null
     private val binding get() = _binding!!
-    private val loginViewModel by lazy {LoginViewModel(requireActivity().application)}
+    private val loginViewModel by lazy { LoginViewModel(requireActivity().application) }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = DataBindingUtil.inflate(inflater,R.layout.login,container,false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.login,container,false)
         return binding.root
     }
 

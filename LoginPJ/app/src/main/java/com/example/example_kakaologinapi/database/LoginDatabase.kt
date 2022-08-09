@@ -1,6 +1,7 @@
 package com.example.example_kakaologinapi.database
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -11,7 +12,7 @@ abstract class LoginDatabase : RoomDatabase(){
 
     companion object{
         private var LoginInstance : LoginDatabase ?= null
-        fun getInstance(context:Application):LoginDatabase{
+        fun getInstance(context:Context):LoginDatabase{
             return LoginInstance ?: synchronized(LoginDatabase::class.java){
                 val instance = Room.databaseBuilder(context.applicationContext,LoginDatabase::class.java,"LoginDatabase").fallbackToDestructiveMigration().build()
                 LoginInstance=instance

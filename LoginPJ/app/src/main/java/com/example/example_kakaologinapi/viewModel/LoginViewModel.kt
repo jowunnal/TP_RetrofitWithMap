@@ -1,4 +1,4 @@
-package com.example.example_kakaologinapi
+package com.example.example_kakaologinapi.viewModel
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
@@ -7,17 +7,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.example_kakaologinapi.database.LoginDatabase
-import com.example.example_kakaologinapi.database.LoginRepository
+import com.example.example_kakaologinapi.repository.LoginRepository
 import com.example.example_kakaologinapi.database.User
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.*
-import kotlin.math.log
 
 class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
-    private val loginDatabase = LoginDatabase.getInstance(app)
-    private val repository= LoginRepository(loginDatabase.loginDao)
+    private val repository= LoginRepository.getInstance(app.applicationContext)
     var mutableLogFlag = MutableLiveData(false)
     val logFlag: LiveData<Boolean> get() = mutableLogFlag
 

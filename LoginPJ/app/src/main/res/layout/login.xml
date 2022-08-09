@@ -2,14 +2,14 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Login">
+    tools:context=".fragment.Login">
     <data>
         <variable
             name="user"
             type="com.example.example_kakaologinapi.database.User" />
         <variable
             name="loginViewModel"
-            type="com.example.example_kakaologinapi.LoginViewModel" />
+            type="com.example.example_kakaologinapi.viewModel.LoginViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
