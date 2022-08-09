@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/studyAndroid/LoginPJ/app/src/main/res/drawable/ic_baseline_lock_24.xml" value="0.193" />
+        <entry key="..\:/studyAndroid/LoginPJ/app/src/main/res/layout/activity_home.xml" value="0.3651041666666667" />
         <entry key="..\:/studyAndroid/LoginPJ/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/studyAndroid/LoginPJ/app/src/main/res/layout/home.xml" value="0.3651041666666667" />
+        <entry key="..\:/studyAndroid/LoginPJ/app/src/main/res/layout/login.xml" value="0.36614583333333334" />
         <entry key="..\:/studyAndroid/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
       </map>
     </option>

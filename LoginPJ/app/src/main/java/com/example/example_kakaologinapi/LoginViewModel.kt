@@ -1,33 +1,70 @@
 package com.example.example_kakaologinapi
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.example_kakaologinapi.database.LoginDatabase
 import com.example.example_kakaologinapi.database.LoginRepository
 import com.example.example_kakaologinapi.database.User
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.kakao.sdk.auth.AuthApiClient
+import com.kakao.sdk.common.model.KakaoSdkError
+import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.*
+import kotlin.math.log
 
-class LoginViewModel(app: Application) : AndroidViewModel(app) {
+class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
     private val loginDatabase = LoginDatabase.getInstance(app)
     private val repository= LoginRepository(loginDatabase.loginDao)
+    var mutableLogFlag = MutableLiveData(false)
+    val logFlag: LiveData<Boolean> get() = mutableLogFlag
 
-    fun getUser(userId:String,userPw:String) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun loginUser(userId:String,userPw:String) {
+        viewModelScope.launch(Dispatchers.Main) {
             val user= withContext(Dispatchers.IO) { repository.getUser() }
-            var logFlag=false
             for(data in user){
                 if(userId==data.userId&&userPw==data.userPw){
-                    logFlag=true
+                    mutableLogFlag.value=true
+                    continue
+                }
+                else if(userId==data.userId&&userPw!=data.userPw){
+                    Toast.makeText(app,"비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show()
                     continue
                 }
             }
-            if(logFlag)
-                Log.d("test","로그인 성공")
-            else
-                Log.d("test","아이디 또는 패스워드가 일치하지 않습니다.")
+            Toast.makeText(app,"존재하지 않는 아이디 입니다.",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun loginKakao(){
+        if (AuthApiClient.instance.hasToken()) {
+            UserApiClient.instance.accessTokenInfo { _, error ->
+                if (error != null) {
+                    if (error is KakaoSdkError && error.isInvalidTokenError()) {
+                        loginWithKakaoAccount()
+                    }
+                    else {
+                        Log.d("test","카카오 로그인 에러")
+                    }
+                }
+                else {
+                    //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
+                }
+            }
+        }
+        else {
+            loginWithKakaoAccount()
+        }
+    }
+    fun loginWithKakaoAccount() {
+        UserApiClient.instance.loginWithKakaoAccount(app.applicationContext) { token, error ->
+            if (error != null) {
+                Log.e("Tag", "Login 실패")
+            } else if (token != null) {
+                Log.e("Tag", "로그인 성공")
+            }
         }
     }
 

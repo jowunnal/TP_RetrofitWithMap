@@ -2,34 +2,17 @@ package com.example.example_kakaologinapi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.example.example_kakaologinapi.database.User
-import com.example.example_kakaologinapi.databinding.ActivityMainBinding
-import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.user.UserApiClient
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityMainBinding
-    private val vm by lazy{LoginViewModel(application)}
+    private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=DataBindingUtil.setContentView(this,R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
-        binding.loginViewModel= ViewModelProvider(this)[LoginViewModel::class.java]
-
-
-        KakaoSdk.init(this, "255e031fc634ddb6120157a6e2e025e1")
-
-        UserApiClient.instance.loginWithKakaoTalk(this){token, error ->  
-            if(error != null){
-                Log.e("Tag","Login 실패")
-            }
-            else if (token!=null){
-                Log.e("Tag","로그인 성공")
-            }
-        }
+        val navHost=supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
+        navController=navHost.navController
     }
 }
