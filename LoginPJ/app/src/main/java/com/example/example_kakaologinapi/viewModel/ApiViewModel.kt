@@ -12,6 +12,8 @@ import com.example.example_kakaologinapi.retrofit.DTO.List
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
 
 class ApiViewModel(private val app: Application) : AndroidViewModel(app) {
     private val repository=LoginRepository.getInstance(app.applicationContext)
@@ -19,10 +21,9 @@ class ApiViewModel(private val app: Application) : AndroidViewModel(app) {
     val restaurantList get() = mutablelist
 
     fun getRestaurantData(city:String){
-        var list=ArrayList<List>()
         viewModelScope.launch(Dispatchers.Main) {
             val response = withContext(Dispatchers.IO) { repository.getRestaurantData(app.getString(R.string.key)
-                ,city) }
+                ,"남구") }
             if(response.isSuccessful){
                 val result=response.body()?.body?.data?.list
                 result.let{
@@ -39,5 +40,14 @@ class ApiViewModel(private val app: Application) : AndroidViewModel(app) {
                 Log.d("test","통신오류발생: "+response.errorBody())
             }
         }
+    }
+    fun makeMarker(list:List): MapPOIItem {
+        val marker = MapPOIItem()
+        val mapPoint= MapPoint.mapPointWithGeoCoord(list.lat!!,list.lng!!)
+        marker.itemName = list.company
+        marker.mapPoint = mapPoint
+        marker.markerType = MapPOIItem.MarkerType.BluePin// 기본으로 제공하는 BluePin 마커 모양.
+        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
+        return marker
     }
 }
