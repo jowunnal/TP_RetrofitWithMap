@@ -2,13 +2,10 @@ package com.example.example_kakaologinapi.viewModel
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.example_kakaologinapi.database.LoginDatabase
+import androidx.lifecycle.*
 import com.example.example_kakaologinapi.repository.LoginRepository
 import com.example.example_kakaologinapi.database.User
+import com.example.example_kakaologinapi.databinding.RegisterBinding
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
@@ -19,15 +16,15 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
     var mutableLogFlag = MutableLiveData(false)
     val logFlag: LiveData<Boolean> get() = mutableLogFlag
 
-    fun loginUser(userId:String,userPw:String) {
+    fun loginUser(client:User) {
         viewModelScope.launch(Dispatchers.Main) {
             val user= withContext(Dispatchers.IO) { repository.getUser() }
             for(data in user){
-                if(userId==data.userId&&userPw==data.userPw){
+                if(client.userId==data.userId&&client.userPw==data.userPw){
                     mutableLogFlag.value=true
                     continue
                 }
-                else if(userId==data.userId&&userPw!=data.userPw){
+                else if(client.userId==data.userId&&client.userPw!=data.userPw){
                     Toast.makeText(app,"비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show()
                     continue
                 }
@@ -66,12 +63,13 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun addUser(id:String,pw:String){
-        viewModelScope.launch(Dispatchers.IO) { repository.addUser(User(id,"jinho",pw)) }
-        Log.d("test", "$id $pw")
+    fun registerUser(user:User){
+        viewModelScope.launch(Dispatchers.IO) { repository.addUser(user) }
+        Log.d("test", "${user.userId} ${user.userPw}")
     }
 
     fun deleteUser(id:String,pw:String){
         viewModelScope.launch(Dispatchers.IO) { repository.deleteUser(User(id,"jinho",pw)) }
     }
+
 }

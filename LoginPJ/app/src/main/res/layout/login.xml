@@ -10,6 +10,10 @@
         <variable
             name="loginViewModel"
             type="com.example.example_kakaologinapi.viewModel.LoginViewModel" />
+        <variable
+            name="navigation"
+            type="androidx.navigation.NavController" />
+        <import type="com.example.example_kakaologinapi.R"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
@@ -82,7 +86,7 @@
             app:layout_constraintTop_toTopOf="parent" >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextID"
-                android:text="@{user.userId}"
+                android:text="@={user.userId}"
                 android:hint="아이디"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -106,7 +110,7 @@
             app:layout_constraintTop_toBottomOf="@+id/et1" >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPW"
-                android:text="@{user.userPw}"
+                android:text="@={user.userPw}"
                 android:hint="비밀번호"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -125,7 +129,7 @@
             app:strokeWidth="1dp"
             app:strokeColor="#BCBCBC"
             app:cornerRadius="15dp"
-            android:onClick="@{()->loginViewModel.addUser(editTextID.getText().toString(),editTextPW.getText().toString())}"
+            android:onClick="@{()->navigation.navigate(R.id.action_loginFragment_to_register)}"
             app:layout_constraintBottom_toTopOf="@+id/button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +149,7 @@
             app:strokeWidth="1dp"
             app:strokeColor="#BCBCBC"
             app:cornerRadius="15dp"
-            android:onClick="@{()->loginViewModel.loginUser(editTextID.getText().toString(),editTextPW.getText().toString())}"
+            android:onClick="@{()->loginViewModel.loginUser(user)}"
             app:layout_constraintBottom_toTopOf="@+id/button3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

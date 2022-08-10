@@ -4,4 +4,4 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class User(@PrimaryKey val userId:String, val userName:String, val userPw:String)
+data class User(@PrimaryKey var userId:String, var userName:String, var userPw:String)
