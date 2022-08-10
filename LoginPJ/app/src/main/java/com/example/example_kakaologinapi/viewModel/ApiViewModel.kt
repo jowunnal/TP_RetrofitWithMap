@@ -23,7 +23,7 @@ class ApiViewModel(private val app: Application) : AndroidViewModel(app) {
     fun getRestaurantData(city:String){
         viewModelScope.launch(Dispatchers.Main) {
             val response = withContext(Dispatchers.IO) { repository.getRestaurantData(app.getString(R.string.key)
-                ,"남구") }
+                ,city) }
             if(response.isSuccessful){
                 val result=response.body()?.body?.data?.list
                 result.let{

@@ -38,11 +38,11 @@ class Home : Fragment() {
             for (data in it){
                 markerList.add(apiViewModel.makeMarker(data))
             }
-            Log.d("test",it.toString())
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(it[0].lat!!, it[0].lng!!), true)
             mapView.addPOIItems(markerList.toArray(arrayOfNulls(markerList.size)))
         })
         binding.mapView.addView(mapView)
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(35.5034686, 129.3804962), true)
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(35.5383773, 129.3113596), true)
         mapView.zoomIn(true)
         mapView.zoomOut(true)
 
