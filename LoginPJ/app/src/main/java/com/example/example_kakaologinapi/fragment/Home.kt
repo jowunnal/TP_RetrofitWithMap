@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.example_kakaologinapi.databinding.HomeBinding
 import com.example.example_kakaologinapi.viewModel.ApiViewModel
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 
 class Home : Fragment() {
     private var _binding : HomeBinding ?= null
@@ -28,7 +30,10 @@ class Home : Fragment() {
         binding.apiViewModel=apiViewModel
         binding.lifecycleOwner=this
         apiViewModel.restaurantList.observe(viewLifecycleOwner, Observer {
-            binding.tvApi.text=it.toString()
+
         })
+        val mapView=MapView(requireActivity())
+        binding.mapView.addView(mapView)
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(35.5383773, 129.3113596), true)
     }
 }

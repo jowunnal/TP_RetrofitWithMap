@@ -1,6 +1,7 @@
 package com.example.example_kakaologinapi.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.example.example_kakaologinapi.viewModel.LoginViewModel
 import com.example.example_kakaologinapi.R
 import com.example.example_kakaologinapi.databinding.LoginBinding
 import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
 
 class Login : Fragment() {
     private var _binding : LoginBinding ?= null
@@ -28,7 +30,7 @@ class Login : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        KakaoSdk.init(requireActivity(), "255e031fc634ddb6120157a6e2e025e1")
+        KakaoSdk.init(requireActivity(), requireActivity().getString(R.string.nativeKey))
 
         binding.lifecycleOwner=this
         binding.loginViewModel= loginViewModel
