@@ -100,8 +100,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-
-            android:inputType="textPassword"
+            app:passwordToggleEnabled="true"
             app:startIconDrawable="@drawable/ic_baseline_lock_24"
             app:layout_constraintBottom_toTopOf="@+id/button4"
             app:layout_constraintEnd_toEndOf="parent"
@@ -112,6 +111,7 @@
                 android:id="@+id/editTextPW"
                 android:text="@={user.userPw}"
                 android:hint="비밀번호"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -129,7 +129,7 @@
             app:strokeWidth="1dp"
             app:strokeColor="#BCBCBC"
             app:cornerRadius="15dp"
-            android:onClick="@{()->navigation.navigate(R.id.action_loginFragment_to_register)}"
+            android:onClick="@{()->navigation.navigate(@id/action_loginFragment_to_register)}"
             app:layout_constraintBottom_toTopOf="@+id/button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
