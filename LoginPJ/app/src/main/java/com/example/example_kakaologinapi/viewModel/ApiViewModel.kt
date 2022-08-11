@@ -32,9 +32,7 @@ class ApiViewModel(private val app: Application) : AndroidViewModel(app) {
                     else{
                         mutablelist.value= it as ArrayList<List>?
                     }
-
                 }
-
             }
             else{
                 Log.d("test","통신오류발생: "+response.errorBody())

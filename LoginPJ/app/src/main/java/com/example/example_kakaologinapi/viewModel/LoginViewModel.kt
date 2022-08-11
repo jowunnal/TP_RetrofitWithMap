@@ -10,26 +10,51 @@ import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.*
+import kotlin.math.log
 
 class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
     private val repository= LoginRepository.getInstance(app.applicationContext)
-    var mutableLogFlag = MutableLiveData(false)
-    val logFlag: LiveData<Boolean> get() = mutableLogFlag
+    var mutableLogFlag = MutableLiveData(0)
+    val logFlag: LiveData<Int> get() = mutableLogFlag
 
-    fun loginUser(client:User) {
-        viewModelScope.launch(Dispatchers.Main) {
-            val user= withContext(Dispatchers.IO) { repository.getUser() }
-            for(data in user){
-                if(client.userId==data.userId&&client.userPw==data.userPw){
-                    mutableLogFlag.value=true
-                    continue
-                }
-                else if(client.userId==data.userId&&client.userPw!=data.userPw){
-                    Toast.makeText(app,"비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show()
-                    continue
-                }
+    fun loginUser(client:User){
+        viewModelScope.launch(Dispatchers.Main){checkUser(client,"환영합니다.","비밀번호가 틀렸습니다.","존재하지 않는 계정 입니다.")}
+    }
+    suspend fun registerUser(user:User):Boolean{
+        var result=false
+        viewModelScope.launch(Dispatchers.Main){
+            val job = launch{checkUser(user,"이미 존재하는 아이디 입니다.","이미 존재하는 아이디 입니다.",user.userName+"님의 회원가입이 완료되었습니다.")}
+            job.join()
+            if(logFlag.value==0) {
+                repository.addUser(user)
+                result=true
+                Log.d("test", "${user.userId} ${user.userPw}")
             }
-            Toast.makeText(app,"존재하지 않는 아이디 입니다.",Toast.LENGTH_SHORT).show()
+            mutableLogFlag.value=0
+        }.join()
+        return result
+    }
+
+    fun deleteUser(id:String,pw:String){
+        viewModelScope.launch(Dispatchers.IO) { repository.deleteUser(User(id,"jinho",pw)) }
+    }
+
+    suspend fun checkUser(client:User,succeedText:String,wrongText:String,notFoundText:String) {
+        val user= withContext(Dispatchers.IO) { repository.getUser() }
+        for(data in user){
+            if(client.userId==data.userId&&client.userPw==data.userPw){
+                mutableLogFlag.value=1
+                Toast.makeText(app,succeedText,Toast.LENGTH_SHORT).show()
+                return
+            }
+            else if(client.userId==data.userId&&client.userPw!=data.userPw){
+                mutableLogFlag.value=2
+                Toast.makeText(app,wrongText,Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+        if(logFlag.value==0){
+            Toast.makeText(app,notFoundText,Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -62,14 +87,4 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
             }
         }
     }
-
-    fun registerUser(user:User){
-        viewModelScope.launch(Dispatchers.IO) { repository.addUser(user) }
-        Log.d("test", "${user.userId} ${user.userPw}")
-    }
-
-    fun deleteUser(id:String,pw:String){
-        viewModelScope.launch(Dispatchers.IO) { repository.deleteUser(User(id,"jinho",pw)) }
-    }
-
 }

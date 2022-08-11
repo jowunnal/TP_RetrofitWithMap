@@ -39,9 +39,9 @@ class Login : Fragment() {
         binding.loginViewModel= loginViewModel
         binding.navigation=Navigation.findNavController(view)
         loginViewModel.logFlag.observe(viewLifecycleOwner, Observer {
-            if(it){
+            if(it==1){
                 Navigation.findNavController(view).navigate(R.id.action_log_to_home)
-                loginViewModel.mutableLogFlag.value=false
+                loginViewModel.mutableLogFlag.value=0
             }
         })
 

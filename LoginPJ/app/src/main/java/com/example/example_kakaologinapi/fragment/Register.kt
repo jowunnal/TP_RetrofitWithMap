@@ -12,11 +12,16 @@ import androidx.core.widget.doOnTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.example_kakaologinapi.database.User
 import com.example.example_kakaologinapi.databinding.RegisterBinding
 import com.example.example_kakaologinapi.viewModel.LoginViewModel
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Register : Fragment() {
     private var _binding : RegisterBinding ?= null
@@ -36,19 +41,25 @@ class Register : Fragment() {
         binding.loginViewModel=loginViewModel
         binding.lifecycleOwner=this
         binding.user=user
-        binding.navigation=Navigation.findNavController(view)
         binding.register=this
         binding.btnSignUP.setOnClickListener {
-            if(binding.etName.helperText.isNullOrEmpty()|| binding.etID.helperText.isNullOrEmpty()||binding.etPW.helperText.isNullOrEmpty()||binding.etPWCheck.helperText.isNullOrEmpty()){
-                loginViewModel.registerUser(user)
-                Navigation.findNavController(view).popBackStack()
-                Log.d("test",user.toString())
+            if(binding.editTextName.text.isNullOrEmpty()|| binding.editTextID.text.isNullOrEmpty()||binding.editTextPW.text.isNullOrEmpty()||binding.editTextPWCheck.text.isNullOrEmpty()){
+                Toast.makeText(requireActivity(),"작성하지 않은 항목이 있습니다.",Toast.LENGTH_SHORT).show()
             }
-            else{
+            else if(binding.etName.helperText?.isNotEmpty() == true || binding.etID.helperText?.isNotEmpty() == true ||
+                binding.etPW.helperText?.isNotEmpty() == true || binding.etPWCheck.helperText?.isNotEmpty() == true) {
                 Toast.makeText(requireActivity(),"올바른 형식으로 입력되지 않았습니다.",Toast.LENGTH_SHORT).show()
             }
+            else{
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val result= withContext(Dispatchers.IO){loginViewModel.registerUser(user)}
+                    if(result) {
+                        Navigation.findNavController(view).popBackStack()
+                        Log.d("test", user.toString())
+                    }
+                }
+            }
         }
-
     }
 
     val checkNameIsCorrect = fun(inputString:String){
@@ -73,6 +84,10 @@ class Register : Fragment() {
         }
         else
             binding.etPW.helperText=""
+        if(binding.etPWCheck.helperText?.isNotEmpty() == true){
+            binding.editTextPWCheck.setText("")
+            binding.etPWCheck.helperText=""
+        }
     }
 
     val checkPwDoubleIsCorrect = fun(inputString: String){

@@ -31,7 +31,7 @@
                 android:id="@+id/etCity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="동 입력"
+                android:hint="구/군 입력"
                 android:textColor="#6E6C6C" />
         </com.google.android.material.textfield.TextInputLayout>
 

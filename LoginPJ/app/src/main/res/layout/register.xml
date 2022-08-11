@@ -10,13 +10,9 @@
         <variable
             name="loginViewModel"
             type="com.example.example_kakaologinapi.viewModel.LoginViewModel" />
-        <import type="com.example.example_kakaologinapi.R"/>
         <variable
             name="register"
             type="com.example.example_kakaologinapi.fragment.Register" />
-        <variable
-            name="navigation"
-            type="androidx.navigation.NavController" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
