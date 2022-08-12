@@ -21,7 +21,7 @@ class ApiViewModel(private val app: Application) : AndroidViewModel(app) {
     val restaurantList get() = mutablelist
 
     fun getRestaurantData(city:String){
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.IO) {
             val response = withContext(Dispatchers.IO) { repository.getRestaurantData(app.getString(R.string.key)
                 ,city) }
             if(response.isSuccessful){

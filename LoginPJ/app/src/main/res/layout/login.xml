@@ -5,9 +5,6 @@
     tools:context=".fragment.Login">
     <data>
         <variable
-            name="user"
-            type="com.example.example_kakaologinapi.database.User" />
-        <variable
             name="loginViewModel"
             type="com.example.example_kakaologinapi.viewModel.LoginViewModel" />
         <variable
@@ -29,7 +26,6 @@
             android:layout_marginTop="3dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="71dp"
-            android:onClick="@{()->loginViewModel.deleteUser(editTextID.getText().toString(),editTextPW.getText().toString())}"
             app:strokeWidth="1dp"
             app:strokeColor="#BCBCBC"
             app:cornerRadius="15dp"
@@ -86,7 +82,7 @@
             app:layout_constraintTop_toTopOf="parent" >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextID"
-                android:text="@={user.userId}"
+                android:text="@={loginViewModel.user.userId}"
                 android:hint="아이디"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -109,7 +105,7 @@
             app:layout_constraintTop_toBottomOf="@+id/et1" >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPW"
-                android:text="@={user.userPw}"
+                android:text="@={loginViewModel.user.userPw}"
                 android:hint="비밀번호"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
@@ -149,7 +145,7 @@
             app:strokeWidth="1dp"
             app:strokeColor="#BCBCBC"
             app:cornerRadius="15dp"
-            android:onClick="@{()->loginViewModel.loginUser(user)}"
+            android:onClick="@{()->loginViewModel.loginUser()}"
             app:layout_constraintBottom_toTopOf="@+id/button3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -21,7 +21,6 @@ class Login : Fragment() {
     private var _binding : LoginBinding ?= null
     private val binding get() = _binding!!
     private val loginViewModel by lazy { ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(requireActivity().application))[LoginViewModel::class.java] }
-    private val user by lazy { User("","","") }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,8 +33,7 @@ class Login : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         KakaoSdk.init(requireActivity(), requireActivity().getString(R.string.nativeKey))
-        binding.user=user
-        binding.lifecycleOwner=this
+        binding.lifecycleOwner=viewLifecycleOwner
         binding.loginViewModel= loginViewModel
         binding.navigation=Navigation.findNavController(view)
         loginViewModel.logFlag.observe(viewLifecycleOwner, Observer {

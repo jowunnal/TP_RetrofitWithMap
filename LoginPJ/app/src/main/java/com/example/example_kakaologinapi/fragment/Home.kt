@@ -30,7 +30,7 @@ class Home : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apiViewModel=apiViewModel
-        binding.lifecycleOwner=this
+        binding.lifecycleOwner=viewLifecycleOwner
         val markerList= ArrayList<MapPOIItem>()
         apiViewModel.restaurantList.observe(viewLifecycleOwner, Observer {
             for (data in it){

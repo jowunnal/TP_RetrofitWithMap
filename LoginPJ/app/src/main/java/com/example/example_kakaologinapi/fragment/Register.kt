@@ -16,7 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.example_kakaologinapi.database.User
 import com.example.example_kakaologinapi.databinding.RegisterBinding
+import com.example.example_kakaologinapi.item.RegisterInfo
 import com.example.example_kakaologinapi.viewModel.LoginViewModel
+import com.example.example_kakaologinapi.viewModel.RegisterViewModel
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -26,8 +28,9 @@ import kotlinx.coroutines.withContext
 class Register : Fragment() {
     private var _binding : RegisterBinding ?= null
     private val binding get() = _binding!!
-    private val loginViewModel by lazy { ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(requireActivity().application))[LoginViewModel::class.java] }
-    private val user by lazy { User("","","") }
+    private val registerViewModel by lazy { ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(requireActivity().application))[RegisterViewModel::class.java] }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,10 +41,10 @@ class Register : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.loginViewModel=loginViewModel
-        binding.lifecycleOwner=this
-        binding.user=user
+        binding.registerViewModel=registerViewModel
+        binding.lifecycleOwner=viewLifecycleOwner
         binding.register=this
+
         binding.btnSignUP.setOnClickListener {
             if(binding.editTextName.text.isNullOrEmpty()|| binding.editTextID.text.isNullOrEmpty()||binding.editTextPW.text.isNullOrEmpty()||binding.editTextPWCheck.text.isNullOrEmpty()){
                 Toast.makeText(requireActivity(),"작성하지 않은 항목이 있습니다.",Toast.LENGTH_SHORT).show()
@@ -52,49 +55,14 @@ class Register : Fragment() {
             }
             else{
                 lifecycleScope.launch(Dispatchers.Main) {
-                    val result= withContext(Dispatchers.IO){loginViewModel.registerUser(user)}
+                    val result= registerViewModel.registerUser()
                     if(result) {
                         Navigation.findNavController(view).popBackStack()
-                        Log.d("test", user.toString())
                     }
                 }
             }
         }
     }
 
-    val checkNameIsCorrect = fun(inputString:String){
-        if(inputString.contains(Regex("[^0-9a-zA-Zㄱ-힣_]"))){
-            binding.etName.helperText="특수문자(_)를 제외하고 입력될수 없습니다."
-        }
-        else
-            binding.etName.helperText=""
-    }
 
-    val checkIdIsCorrect = fun(inputString:String){
-        if(inputString.contains("[^0-9a-zA-Zㄱ-힣]".toRegex())){
-            binding.etID.helperText="특수문자는 입력될수 없습니다."
-        }
-        else
-            binding.etID.helperText=""
-    }
-
-    val checkPwIsCorrect = fun(inputString: String){
-        if(inputString.contains("[^0-9a-zA-Zㄱ-힣!@#*]".toRegex())){
-            binding.etPW.helperText="영대소문자,숫자,특수문자(!,@,#,*)만 가능합니다."
-        }
-        else
-            binding.etPW.helperText=""
-        if(binding.etPWCheck.helperText?.isNotEmpty() == true){
-            binding.editTextPWCheck.setText("")
-            binding.etPWCheck.helperText=""
-        }
-    }
-
-    val checkPwDoubleIsCorrect = fun(inputString: String){
-        if(inputString!=user.userPw){
-            binding.etPWCheck.helperText="비밀번호가 일치하지 않습니다."
-        }
-        else
-            binding.etPWCheck.helperText=""
-    }
 }

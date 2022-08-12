@@ -21,4 +21,4 @@
 
 ![tp_RetrofitWithMap_map](https://user-images.githubusercontent.com/75519689/184132760-d618402e-db86-4a24-bd95-187e1dc80e27.PNG)
 
-> ** 상세설명은 [깃허브주소](https://jowunnal.github.io/android/loginWithDatabinding/) 에 있습니다. **
+> ** 상세설명은 [깃블로그](https://jowunnal.github.io/android/loginWithDatabinding/) 에 있습니다. **
