@@ -6,26 +6,35 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.example.example_kakaologinapi.database.User
 import com.example.example_kakaologinapi.item.RegisterInfo
+import com.example.example_kakaologinapi.repository.UserRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RegisterViewModel(app: Application) :ManageMemberViewModel(app) {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(private val app:Application, private val repository: UserRepositoryImpl) :
+    ManageMemberViewModel(app, repository) {
     val info by lazy{ RegisterInfo(ObservableField(""),ObservableField(""),ObservableField(""),ObservableField("")) }
 
     suspend fun registerUser():Boolean{
-        var result=false
-        viewModelScope.launch(Dispatchers.Main){
-            val job = launch(Dispatchers.Main){//main스레드인이유는 checkUser()에서 메인스레드영역의 리소스를 사용하기때문. toast와 livedata.setvalue()
-                checkUser(user,"이미 존재하는 아이디 입니다.","이미 존재하는 아이디 입니다.",user.userName+"님의 회원가입이 완료되었습니다.") }
-            job.join()
-            if(logFlag.value==0) {
+        return withContext(viewModelScope.coroutineContext + Dispatchers.Main) {
+            var result = false
+            checkUser(
+                user,
+                "이미 존재하는 아이디 입니다.",
+                "이미 존재하는 아이디 입니다.",
+                user.userName + "님의 회원가입이 완료되었습니다."
+            )
+            if (logFlag.value == 0) {
                 repository.addUser(user)
-                result=true
+                result = true
                 Log.d("test", "pres: ${user.userId} ${user.userPw}")
             }
-            mutableLogFlag.value=0
-        }.join()
-        return result
+            mutableLogFlag.value = 0
+            result
+        }
     }
 
     fun deleteUser(id:String,pw:String){
@@ -50,11 +59,13 @@ class RegisterViewModel(app: Application) :ManageMemberViewModel(app) {
 
     val checkPwIsCorrect = fun(inputString: String){
         info.r_Pw.set(checkRegisterInfoIsCorrect(inputString,"[^0-9a-zA-Zㄱ-힣!@#*]","영대소문자,숫자,특수문자(!,@,#,*)만 가능합니다."))
+
     }
 
     val checkPwDoubleIsCorrect = fun(inputString: String){
         if(inputString!=user.userPw){
             info.r_PwDouble.set("비밀번호가 일치하지 않습니다.")
+            Log.d("test",user.userPw+" / "+inputString)
         }
         else
             info.r_PwDouble.set("")

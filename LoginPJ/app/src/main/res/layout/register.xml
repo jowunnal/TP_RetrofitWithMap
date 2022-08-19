@@ -7,9 +7,6 @@
         <variable
             name="registerViewModel"
             type="com.example.example_kakaologinapi.viewModel.RegisterViewModel" />
-        <variable
-            name="register"
-            type="com.example.example_kakaologinapi.fragment.Register" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

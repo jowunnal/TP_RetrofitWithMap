@@ -5,18 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.example.example_kakaologinapi.databinding.HomeBinding
 import com.example.example_kakaologinapi.viewModel.ApiViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
+@AndroidEntryPoint
 class Home : Fragment() {
     private var _binding : HomeBinding ?= null
     private val binding get() = _binding !!
-    private val apiViewModel by lazy { ApiViewModel(requireActivity().application) }
+    private val apiViewModel:ApiViewModel by viewModels()
     private val mapView by lazy{MapView(requireActivity())}
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +33,7 @@ class Home : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apiViewModel=apiViewModel
         binding.lifecycleOwner=viewLifecycleOwner
+
         val markerList= ArrayList<MapPOIItem>()
         apiViewModel.restaurantList.observe(viewLifecycleOwner, Observer {
             for (data in it){

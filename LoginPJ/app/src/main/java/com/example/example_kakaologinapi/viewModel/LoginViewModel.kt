@@ -1,19 +1,19 @@
 package com.example.example_kakaologinapi.viewModel
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
-import com.example.example_kakaologinapi.repository.LoginRepository
-import com.example.example_kakaologinapi.database.User
-import com.example.example_kakaologinapi.databinding.RegisterBinding
-import com.example.example_kakaologinapi.item.RegisterInfo
+import com.example.example_kakaologinapi.repository.UserRepositoryImpl
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlin.math.log
+import javax.inject.Inject
 
-class LoginViewModel(app: Application): ManageMemberViewModel(app) {
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val app:Application, private val repository: UserRepositoryImpl)
+    : ManageMemberViewModel(app, repository) {
+
     fun loginUser(){
         viewModelScope.launch(Dispatchers.Main){checkUser(user,"환영합니다.","비밀번호가 틀렸습니다.","존재하지 않는 계정 입니다.")}
     }

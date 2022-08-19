@@ -1,24 +1,23 @@
 package com.example.example_kakaologinapi.viewModel
 
 import android.app.Application
-import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.example_kakaologinapi.database.User
-import com.example.example_kakaologinapi.repository.LoginRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.example.example_kakaologinapi.repository.UserRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-open class ManageMemberViewModel(val app: Application) : AndroidViewModel(app) {
-    val repository= LoginRepository.getInstance(app.applicationContext)
+@HiltViewModel
+open class ManageMemberViewModel @Inject constructor(private val app:Application, private val repository: UserRepositoryImpl) : ViewModel() {
     var mutableLogFlag = MutableLiveData(0)
     val logFlag: LiveData<Int> get() = mutableLogFlag
     val user by lazy { User("","","") }
 
     suspend fun checkUser(client: User, succeedText:String, wrongText:String, notFoundText:String) {
-        val user = withContext(Dispatchers.IO) { repository.getUser() }
+        val user = repository.getUser()
         for (data in user) {
             if (client.userId == data.userId && client.userPw == data.userPw) {
                 mutableLogFlag.value = 1
