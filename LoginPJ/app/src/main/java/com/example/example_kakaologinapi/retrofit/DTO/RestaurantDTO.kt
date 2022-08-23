@@ -37,11 +37,11 @@ data class Body(
 @Xml(name="data")
 data class Data(
     @Element(name="list")
-    val list: kotlin.collections.List<List>
+    val list: kotlin.collections.List<Item>
 )
 
 @Xml(name="list")
-data class List(
+data class Item(
     @PropertyElement(name="address")
     val address: String?,
     @PropertyElement(name="city")

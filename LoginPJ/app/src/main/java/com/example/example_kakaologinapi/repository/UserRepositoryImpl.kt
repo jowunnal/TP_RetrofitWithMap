@@ -8,7 +8,7 @@ import com.example.example_kakaologinapi.retrofit.DTO.RfcOpenApi
 import retrofit2.Response
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val restaurantService: RestaurantService, private val loginDatabase: LoginDatabase) : UserRepository {
+class UserRepositoryImpl @Inject constructor(val restaurantService: RestaurantService, val loginDatabase: LoginDatabase) : UserRepository {
     private val loginDao=loginDatabase.loginDao()
     override suspend fun getUser(): List<User> = loginDao.getUser()
 
